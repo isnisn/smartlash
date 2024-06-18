@@ -1,107 +1,172 @@
-# :wave: The Basics of GitHub 
+# Building a Smart Lashing Detection System
 
-## 🤓 Course overview and learning outcomes 
+**Name:** Andreas Nilsson  
+**Student Credentials:** an224qi
 
-The goal of this course is to give you a brief introduction to GitHub. We’ll also provide you with materials for further learning and a few ideas to get you started on our platform. 🚀
+## Short Project Overview
+This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey. The project will take approximately 8-10 hours to complete.
 
-## :octocat: Git and GitHub
+## Objective
+* **Why you chose this project:** Ensuring the proper lashing of containers onboard ships is crucial for safety and preventing cargo damage.
+* **What purpose does it serve:** This project aims to alert the crew if the lashing slackens or fails, ensuring timely corrective measures.
+* **What insights you think it will give:** By monitoring the tension on container lashings continuously, we can reduce the risk of accidents and improve shipping safety protocols.
 
-Git is a **distributed Version Control System (VCS)**, which means it is a useful tool for easily tracking changes to your code, collaborating, and sharing. With Git you can track the changes you make to your project so you always have a record of what you’ve worked on and can easily revert back to an older version if need be. It also makes working with others easier—groups of people can work together on the same project and merge their changes into one final source!
+## Material
 
-GitHub is a way to use the same power of Git all online with an easy-to-use interface. It’s used across the software world and beyond to collaborate and maintain the history of projects.
+### List of Material
+Here are the key components required to build this device:
 
-GitHub is home to some of the most advanced technologies in the world. Whether you're visualizing data or building a new game, there's a whole community and set of tools on GitHub that can get you to the next step. This course starts with the basics of GitHub, but we'll dig into the rest later.
+1. **RS PRO Load Cell, 300kg Range, Compression, Tension Measure**
+    - Quantity: 1
+    - Price: ~€160
+    - Shop: [RS-Online](https://se.rs-online.com/web/p/strain-gauges/2042768)
+    - [Datasheet](https://docs.rs-online.com/b2dd/A700000007176393.pdf)
 
-## :octocat: Understanding the GitHub flow 
+2. **Load Cell 300 kg for Tension and Compression, IP68, Stainless**
+    - Quantity: 1
+    - Price: ~€298
+    - Shop: [Vetek](https://www.vetek.com/en/article/load-cell-300-kg-for-tension-and-compression-ip68-stainless)
+    - [Datasheet](https://www.vetek.com/en/dynamics/WebFiles/document/71853b56-87c4-411f-a51d-bdafb98a6e72/Datasheet_101BS_V2.pdf)
 
-The GitHub flow is a lightweight workflow that allows you to experiment and collaborate on your projects easily, without the risk of losing your previous work.
+3. **Articulated Rod-End Ball Joint for S-Load Cell M12x1.75**
+    - Quantity: 2
+    - Price: ~€28
+    - Shop: [Vetek](https://www.vetek.com/en/article/articulated-rod-end-ball-joint-for-s-load-cell-m12x1-75)
+    - [Datasheet](https://www.vetek.com/en/dynamics/WebFiles/document/27fe49d1-d544-4471-baf0-c7c44f18191e/Datasheet_RBJ_V1.pdf)
 
-### Repositories
+4. **HX711 Load Cell Amplifier**
+    - Quantity: 1
+    - Price: ~€12
+    - Shop: [Electrokit](https://www.electrokit.com/forstarkare-for-lastceller-hx711)
+    - [Datasheet](https://www.electrokit.com/upload/product/41016/41016232/hx711_english.pdf)
 
-A repository is where your project work happens--think of it as your project folder. It contains all of your project’s files and revision history.  You can work within a repository alone or invite others to collaborate with you on those files.
+**Total Cost:** ~€526
 
-### Cloning 
+### What the Different Components Do
+- **Load Cell:** Measures tension or compression force.
+- **HX711 Load Cell Amplifier:** Amplifies the small analog signal from the load cell and converts it to a digital signal.
+- **Articulated Rod-End Ball Joint:** Provides flexible connection points for the load cell to the lashing system.
 
-When a repository is created with GitHub, it’s stored remotely in the ☁️. You can clone a repository to create a local copy on your computer and then use Git to sync the two. This makes it easier to fix issues, add or remove files, and push larger commits. You can also use the editing tool of your choice as opposed to the GitHub UI. Cloning a repository also pulls down all the repository data that GitHub has at that point in time, including all versions of every file and folder for the project! This can be helpful if you experiment with your project and then realize you liked a previous version more. 
-To learn more about cloning, read ["Cloning a Repository"](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository). 
+## Computer Setup
 
-### Committing and pushing
-**Committing** and **pushing** are how you can add the changes you made on your local machine to the remote repository in GitHub. That way your instructor and/or teammates can see your latest work when you’re ready to share it. You can make a commit when you have made changes to your project that you want to “checkpoint.” You can also add a helpful **commit message** to remind yourself or your teammates what work you did (e.g. “Added a README with information about our project”).
+### Chosen IDE and Steps
+1. **IDE Used:** Vim
+2. **Code Uploading:** Via idf.py
+3. **Steps:**
+    - Install Arduino IDE.
+    - Install the HX711 library: Go to **Sketch** > **Include Library** > **Manage Libraries**, and search for HX711, then install.
+    - Connect the ESP32 to your computer via USB.
+    - Write and upload the code to the ESP32.
 
-Once you have a commit or multiple commits that you’re ready to add to your repository, you can use the push command to add those changes to your remote repository. Committing and pushing may feel new at first, but we promise you’ll get used to it 🙂
+## Putting Everything Together
 
-## 💻 GitHub terms to know 
+### Circuit Diagram and Wiring
+1. **Connect the Load Cell to the HX711 Amplifier**:
+    - Red (E+): Connect to E+ on HX711.
+    - Black (E-): Connect to E- on HX711.
+    - White (A-): Connect to A- on HX711.
+    - Green (A+): Connect to A+ on HX711.
 
-### Repositories 
-We mentioned repositories already, they are where your project work happens, but let’s talk a bit more about the details of them! As you work more on GitHub you will have many repositories which may feel confusing at first. Fortunately, your ["GitHub dashboard"](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/about-your-personal-dashboard) helps to easily navigate to your repositories and see useful information about them. Make sure you’re logged in to see it!
+2. **Connect the HX711 to the Heltec ESP32 V2**:
+    - VCC: Connect to the 3.3V pin on the ESP32.
+    - GND: Connect to a GND pin on the ESP32.
+    - DT (Data): Connect to GPIO 16 on the ESP32.
+    - SCK (Clock): Connect to GPIO 4 on the ESP32.
 
-Repositories also contain **README**s. You can add a README file to your repository to tell other people why your project is useful, what they can do with your project, and how they can use it. We are using this README to communicate how to learn Git and GitHub with you. 😄 
-To learn more about repositories read ["Creating, Cloning, and Archiving Repositories](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repositories) and ["About README's"](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-readmes). 
+## Platform Setup
+Im using Chirpstack and a VPS hosted on Linode running Ubuntu.
+https://console.helium-iot.xyz/
+https://cloud.linode.com/
 
-### Branches
-You can use branches on GitHub to isolate work that you do not want merged into your final project just yet. Branches allow you to develop features, fix bugs, or safely experiment with new ideas in a contained area of your repository. Typically, you might create a new branch from the default branch of your repository—main. This makes a new working copy of your repository for you to experiment with. Once your new changes have been reviewed by a teammate, or you are satisfied with them, you can merge your changes into the default branch of your repository.
-To learn more about branching, read ["About Branches"](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-branches).
+I choose this platforms because I already had them. It could be scaled quite big.
 
-### Forks
-A fork is another way to copy a repository, but is usually used when you want to contribute to someone else’s project. Forking a repository allows you to freely experiment with changes without affecting the original project and is very popular when contributing to open source software projects!
-To learn more about forking, read ["Fork a repo"](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo)
+## The Code
 
-### Pull requests
-When working with branches, you can use a pull request to tell others about the changes you want to make and ask for their feedback. Once a pull request is opened, you can discuss and review the potential changes with collaborators and add more changes if need be. You can add specific people as reviewers of your pull request which shows you want their feedback on your changes! Once a pull request is ready-to-go, it can be merged into your main branch.
-To learn more about pull requests, read ["About Pull Requests"](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests). 
+```cpp
+/** 
+ * This function shifts the bits of an integer and stores each byte into an array. Prepping it for being sent over LoRaWAN.
+ *
+ * The function `shift_data` takes a pointer to a 32-bit signed integer (`int32_t`) and shifts
+ * the bits to separate each byte. It stores each resulting byte into the `msgData` array.
+
+ *      - During each iteration:
+ *          - The dereferenced value of `data` is bitwise right-shifted by `(i * 8)` bits. 
+ *            This operation effectively moves the byte for the current loop iteration to the rightmost position.
+ *
+ *          - The result is then bitwise ANDed with `0xFF` to isolate the least significant byte.
+ *
+ *          - The isolated byte is then stored in the `msgData` array at index `i`.
+ *          This results in filling the `msgData` array with individual bytes from the input integer.
+ */
+static void shift_data(const int32_t *data)
+{
+    for (int i = 0; i < sizeof(msgData); ++i)
+    {
+        msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
+    }
+}
+
+```
+
+## Explanation
+The setup initializes the serial communication and HX711.
+The loop reads and prints the weight data from the load cell every second.
+
+## Transmitting the Data / Connectivity
+### Data Transmission
+How often is the data sent?
+
+Which wireless protocols did you use (WiFi, LoRa, etc …)?
+
+Which transport protocols were used (MQTT, webhook, etc …)
+
+*Elaborate on the design choices regarding data transmission and wireless protocols. That is how your choices affect the device range and battery consumption.
+
+The data is sent every 15 minutes over LoRaWAN using Helium network and Chirpstack. LoRaWAN is best suited here imo because of the low amount of data being sent, also the battery life is increasing due to not using wifi. The data is transmitted over LoRaWAN(routed in the Helium network) to Chirpstack. 
+
+#### Simple socket with HTTP
+Im using a simple python script that listens on data being sent from a Chirpstack(by HTTP) by posting to the socket on my VPS. The server then uses a library for Python called InfluxDBClient, that insert a Point-object in the influx database.
+
+#### Battery life and range
+Well, the battery life is way better with LoRaWAN than traditional wifi. The range is also better considering the might be installed on a boat/ship that could be very long, and the signal is being transmitted through thick walls. Wifi might end up short here, a simple Dragino or RAK gateway installed on the boat/ship would to the job. LoRaWAN radio signals also utilizes sub-ghz bandwidth allowing better penetration through different materials.
+
+## Design Choices
+LoRaWAN: Chosen for its long range and low power consumption, suitable for maritime environments.
+MQTT: Efficient for low-bandwidth communications.
+
+## Presenting the Data
+### Dashboard
+#### Dashboard built using InfluxDB own dashboard tool
+![dashboard](https://hackmd.io/_uploads/B1Nt5ykHC.png)
+
+### How often is data saved in the database.
+The data is put into buckets with a retention period of 30 days.
+I choose influxdb because its a time-series database. I could have choosen mongodb or other time-series but I find influxdb easiest to work with.
+
+## Dashboard and Database
+Dashboard: Built using InfluxDB V2.
+Data Preservation: Data stored in a InfluxDB instance to be preserved over long durations.
 
 
-### Issues
-Issues are a way to track enhancements, tasks, or bugs for your work on GitHub. Issues are a great way to keep track of all the tasks you want to work on for your project and let others know what you plan to work on. You can also use issues to tell a favorite open source project about a bug you found or a feature you think would be great to add!
+Sample Dashboard
+ALT
+Image failed to load
 
-For larger projects, you can keep track of many issues on a project board. GitHub Projects help you organize and prioritize your work and you can read more about them [in this "About Project boards document](https://docs.github.com/en/github/managing-your-work-on-github/about-project-boards). You likely won’t need a project board for your assignments, but once you move on to even bigger projects, they’re a great way to organize your team’s work!
-You can also link together pull requests and issues to show that a fix is in progress and to automatically close the issue when someone merges the pull request.
-To learn more about issues and linking them to your pull requests, read ["About Issues"](https://docs.github.com/en/github/managing-your-work-on-github/about-issues). 
+Note: Replace with an actual image
 
-### Your user profile
+Data Automation
+Set triggers for alerts when the lashing force drops below a threshold.
+Finalizing the Design
+Results and Reflections
+The final project achieved its goal of detecting lashing tension. Future improvements could include better shielding for noise reduction and enhanced calibration routines.
 
-Your profile page tells people the story of your work through the repositories you're interested in, the contributions you've made, and the conversations you've had. You can also give the world a unique view into who you are with your profile README. You can use your profile to let future employers know all about you! 
-To learn more about your user profile and adding and updating your profile README, read ["Managing Your Profile README"](https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/managing-your-profile-readme). 
+ALT
+Image failed to load
 
-### Using markdown on GitHub 
+Note: Replace with an actual image
 
-You might have noticed already, but you can add some fun styling to your issues, pull requests, and files. ["Markdown"](https://guides.github.com/features/mastering-markdown/) is an easy way to style your issues, pull requests, and files with some simple syntax. This can be helpful to organize your information and make it easier for others to read. You can also drop in gifs and images to help convey your point!
-To learn more about using GitHub’s flavor of markdown, read ["Basic Writing and Formatting Syntax"](https://docs.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax). 
+Video Presentation
+A video presentation link here.
 
-### Engaging with the GitHub community
+With this guide, you should be able to build and monitor a smart lashing system for onboard ship containers, ensuring cargo safety during transit.
 
-The GitHub community is vast. There are many types of people who use GitHub in their day to day—students like you, professional developers, hobbyists working on open source projects, and explorers who are just jumping into the world of software development on their own. There are many ways you can interact with the larger GitHub community, but here are three places where you can start. 
-
-#### Starring repositories 
-
-If you find a repository interesting or you want to keep track of it, star it! When you star a repository it’s also used as a signal to surface better recommendations on github.com/explore. If you’d like to get back to your starred repositories you can do so via your user profile. 
-To learn  more about starring repositories, read ["Saving Repositories with Stars"](https://docs.github.com/en/github/getting-started-with-github/saving-repositories-with-stars). 
-
-#### Following users 
-
-You can follow people on GitHub to receive notifications about their activity and discover projects in their communities. When you follow a user, their public GitHub activity will show up on your dashboard so you can see all the cool things they are working on. 
-To learn more about following users, read ["Following People"](https://docs.github.com/en/github/getting-started-with-github/following-people).
-
-#### Browsing GitHub Explore 
-
-GitHub Explore is a great place to do just that … explore :smile: You can find new projects, events, and developers to interact with.
-
-You can check out the GitHub Explore website [at github.com/explore](https://github.com/explore). The more you interact with GitHub the more tailored your Explore view will be. 
-
-## 📝 Optional next steps 
-
-* Open a pull request and let your teacher know that you’ve finished this course.  
-* Create a new markdown file in this repository. Let them know what you learned and what you are still confused about! Experiment with different styles!
-* Create your profile README. Let the world know a little bit more about you! What are you interested in learning? What are you working on? What's your favorite hobby? Learn more about creating your profile README in the document, ["Managing Your Profile README"](https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/managing-your-profile-readme).
-* Go to your user dashboard and create a new repository. Experiment with the features within that repository to familiarize yourself with them. 
-* [Let us know what you liked or didn’t like about the content of this course](https://support.github.com/contact/education). What would you like to see more of? What would be interesting or helpful to your learning journey? 
-
-## 📚  Resources 
-* [A short video explaining what GitHub is](https://www.youtube.com/watch?v=w3jLJU7DT5E&feature=youtu.be) 
-* [Git and GitHub learning resources](https://docs.github.com/en/github/getting-started-with-github/git-and-github-learning-resources) 
-* [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)
-* [How to use GitHub branches](https://www.youtube.com/watch?v=H5GJfcp3p4Q&feature=youtu.be)
-* [Interactive Git training materials](https://githubtraining.github.io/training-manual/#/01_getting_ready_for_class)
-* [GitHub's Learning Lab](https://lab.github.com/)
-* [Education community forum](https://education.github.community/)
-* [GitHub community forum](https://github.community/)
