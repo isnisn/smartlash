@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(EXTRA_COMPONENT_DIRS /Users/andreasnorje/Code/esp/esp-idf-lib/components)
+#set(EXTRA_COMPONENT_DIRS /Users/andreasnorje/Code/esp/esp-idf-lib/components)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
 # Update the below line to match the path to the ttn-esp32 library,
