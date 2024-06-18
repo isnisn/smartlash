@@ -42,10 +42,15 @@ const char *appKey = "27e52edcd7015d465b955173ac8eb150";
 #define TTN_PIN_DIO1 35
 #define TX_INTERVAL 30
 #define LED_PIN 25
-
+#define BIG_ENDIAN 0
+#define LITTLE_ENDIAN 1
 #define __BYTE_ORDER LITTLE_ENDIAN
 
-// Data to be sent
+// Function prototypes
+typedef void (*shift_data_func_t)(const int32_t *);
+
+// Data to be sent, four bytes for this program. We dont need bigger values than
+// a 32-bit uint.
 static uint8_t msgData[4];
 
 // Tags for logging
@@ -55,11 +60,9 @@ static const char *TAG_MAIN = "Main:";
 
 // HX711 device
 hx711_t dev = {.dout = 12, .pd_sck = 13, .gain = HX711_GAIN_A_64};
+shift_data_func_t shift_data_func;
 
-// Function prototypes
-typedef void (*shift_data_func_t)(const int32_t *);
-
-void sendMessages(void *pvParameter) {
+void sendMessages() {
   printf("Sending message...\n");
   ttn_response_code_t res =
       ttn_transmit_message(msgData, sizeof(msgData), 1, false);
@@ -76,7 +79,7 @@ void read_from_hx711(shift_data_func_t shift_data_func) {
   int32_t data;
   size_t times = 10;
 
-  // read from device
+  // Read from device
   esp_err_t r = hx711_wait(&dev, 500);
   if (r != ESP_OK) {
     ESP_LOGE(TAG_HX711, "Device not found: %d (%s)\n", r, esp_err_to_name(r));
@@ -96,7 +99,6 @@ void read_from_hx711(shift_data_func_t shift_data_func) {
   vTaskDelay(pdMS_TO_TICKS(1000));
 
   shift_data_func(&data);
-  sendMessages(NULL);
 }
 
 static void shift_data_le(const int32_t *data) {
@@ -112,6 +114,14 @@ static void shift_data_be(const int32_t *data) {
 }
 
 void setup() {
+
+  switch (__BYTE_ORDER) {
+  case BIG_ENDIAN:
+    shift_data_func = shift_data_be;
+    break;
+  case LITTLE_ENDIAN:
+    shift_data_func = shift_data_le;
+  }
 
   /***** GPIO *****/
 
@@ -168,16 +178,6 @@ void setup() {
 
 void app_main(void) {
 
-  shift_data_func_t shift_data_func;
-
-  switch (__BYTE_ORDER) {
-  case BIG_ENDIAN:
-    shift_data_func = shift_data_be;
-    break;
-  case LITTLE_ENDIAN:
-    shift_data_func = shift_data_le;
-  }
-
   setup();
 
   if (ttn_resume_after_deep_sleep()) {
@@ -199,6 +199,7 @@ void app_main(void) {
   // NULL);
 
   read_from_hx711(shift_data_func);
+  sendMessages();
 
   ESP_LOGI(TAG_MAIN, "Preparing for deepsleep...");
 
