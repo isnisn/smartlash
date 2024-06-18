@@ -104,12 +104,9 @@ I choose this platforms because I already had them. It could be scaled quite big
 
 ```c
 /** 
- * This function shifts the bits of an 32 bit signed integer and stores each byte into an array. Prepping it for being sent over LoRaWAN.
+ * This functions shifts the bits of an 32 bit signed integer and stores each byte into an array
+ . Prepping it for being sent over LoRaWAN, depends on ur choice of the __BYTE_ORDER macro.
  *
- * The function `shift_data` takes a pointer to a 32-bit signed integer (`int32_t`) and shifts
- * the bits to separate each byte, thus prepping it for being sent over LoRaWAN.
- * It stores each resulting byte into the `msgData` array.
-
  *      - During each iteration:
  *          - The dereferenced value of `data` is bitwise right-shifted by `(i * 8)` bits. 
  *            This operation effectively moves the byte for the current loop iteration to the rightmost position.
@@ -119,14 +116,36 @@ I choose this platforms because I already had them. It could be scaled quite big
  *          - The isolated byte is then stored in the `msgData` array at index `i`.
  *          This results in filling the `msgData` array with individual bytes from the input integer.
  */
-static void shift_data(const int32_t *data)
-{
-    for (int i = 0; i < sizeof(msgData); ++i)
-    {
-        msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
-    }
+
+static void shift_data_le(const int32_t *data) {
+  for (int i = 0; i < sizeof(msgData); ++i) {
+    msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
+  }
 }
 
+static void shift_data_be(const int32_t *data) {
+  for (int i = 0; i < sizeof(msgData); ++i) {
+    msgData[sizeof(msgData) - 1 - i] = ((int32_t)*data >> (i * 8)) & 0xFF;
+  }
+}
+
+/**
+* The function pointer points to either of the functions depending on choosen byteorder.
+*/
+  typedef void (*shift_data_func_t)(const int32_t *);
+...
+
+  shift_data_func_t shift_data_func;
+
+  switch (__BYTE_ORDER) {
+  case BIG_ENDIAN:
+    shift_data_func = shift_data_be;
+    break;
+  case LITTLE_ENDIAN:
+    shift_data_func = shift_data_le;
+  }
+...
+  read_from_hx711(shift_data_func);
 
 ```
 
