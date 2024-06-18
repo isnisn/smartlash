@@ -2,6 +2,7 @@
 
 **Name:** Andreas Nilsson  
 **Student Credentials:** an224qi
+Time to setup ~1 hour
 
 ## Short Project Overview
 This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey. The project will take approximately 8-10 hours to complete.
@@ -48,9 +49,29 @@ Here are the key components required to build this device:
 - **Articulated Rod-End Ball Joint:** Provides flexible connection points for the load cell to the lashing system.
 
 
+### Putting Everything Together
+
+### Circuit Diagram and Wiring
+![diagram](doc/2.png)
+
+Connect everything on a breadboard.
+
+1. **Connect the Load Cell to the HX711 Amplifier**:
+    - Red (E+): Connect to E+ on HX711.
+    - Black (E-): Connect to E- on HX711.
+    - White (A-): Connect to A- on HX711.
+    - Green (A+): Connect to A+ on HX711.
+
+2. **Connect the HX711 to the Heltec ESP32 V2**:
+    - VCC: Connect to the 3.3V pin on the ESP32.
+    - GND: Connect to a GND pin on the ESP32.
+    - DT (Data): Connect to GPIO 12 on the ESP32.
+    - SCK (Clock): Connect to GPIO 13 on the ESP32.
+
+---
 ## Steps to Configure HX711 and LoRaWAN
 
-**Choose correct pins for SPI, byteorder and TX interval(in seconds):**
+**First choose correct pins for SPI, byteorder and TX interval(in seconds):**
 ```c
 #define TTN_PIN_SPI_SCLK 5
 #define TTN_PIN_SPI_MOSI 27
@@ -71,28 +92,12 @@ Here are the key components required to build this device:
 ```
 ---
 
-### Putting Everything Together
-
-### Circuit Diagram and Wiring
-1. **Connect the Load Cell to the HX711 Amplifier**:
-    - Red (E+): Connect to E+ on HX711.
-    - Black (E-): Connect to E- on HX711.
-    - White (A-): Connect to A- on HX711.
-    - Green (A+): Connect to A+ on HX711.
-
-2. **Connect the HX711 to the Heltec ESP32 V2**:
-    - VCC: Connect to the 3.3V pin on the ESP32.
-    - GND: Connect to a GND pin on the ESP32.
-    - DT (Data): Connect to GPIO 12 on the ESP32.
-    - SCK (Clock): Connect to GPIO 13 on the ESP32.
-
----
 ### Chosen IDE and Steps
 
-1. **IDE Used:** Free of choice, I used Vim
-2. **Code Uploading:** Using `idf.py`
-3. **Steps:**
-
+**IDE Used:** Free of choice, I used Vim
+**Code Uploading:** Using `idf.py`
+**Steps:**
+1.
     - Clone the ESP-IDF repository:
         ```bash
         git clone --recursive https://github.com/espressif/esp-idf.git
@@ -107,10 +112,11 @@ Here are the key components required to build this device:
         . ./export.sh
         ```
     - Connect the Heltec ESP32 to your computer via USB
+    - cd to this projects root-folder
     - Run `idf.py set-target esp32` to set the target to ESP32 (if not already set).
     - Run `idf.py build` to compile the code.
     - Run `idf.py flash` to upload the code to the ESP32.
-    - Optionally, run `idf.py monitor` to view the output from the ESP32 serial monitor.
+    - Run `idf.py monitor` to view the output from the ESP32 serial monitor.
 
 ---
 
