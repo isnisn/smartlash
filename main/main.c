@@ -43,6 +43,8 @@ const char *appKey = "27e52edcd7015d465b955173ac8eb150";
 #define TX_INTERVAL 30
 #define LED_PIN 25
 
+#define __BYTE_ORDER LITTLE_ENDIAN
+
 // Data to be sent
 static uint8_t msgData[4];
 
@@ -55,7 +57,7 @@ static const char *TAG_MAIN = "Main:";
 hx711_t dev = {.dout = 12, .pd_sck = 13, .gain = HX711_GAIN_A_64};
 
 // Function prototypes
-static void shift_data(const int32_t *data);
+typedef void (*shift_data_func_t)(const int32_t *);
 
 void sendMessages(void *pvParameter) {
   printf("Sending message...\n");
@@ -70,7 +72,7 @@ void sendMessages(void *pvParameter) {
   return;
 }
 
-void read_from_hx711(void *pvParameters) {
+void read_from_hx711(shift_data_func_t shift_data_func) {
   int32_t data;
   size_t times = 10;
 
@@ -93,14 +95,19 @@ void read_from_hx711(void *pvParameters) {
   // Sleep for 10 seconds
   vTaskDelay(pdMS_TO_TICKS(1000));
 
-  shift_data(&data);
+  shift_data_func(&data);
   sendMessages(NULL);
 }
 
-// Shift the data to the array
-static void shift_data(const int32_t *data) {
+static void shift_data_le(const int32_t *data) {
   for (int i = 0; i < sizeof(msgData); ++i) {
     msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
+  }
+}
+
+static void shift_data_be(const int32_t *data) {
+  for (int i = 0; i < sizeof(msgData); ++i) {
+    msgData[sizeof(msgData) - 1 - i] = ((int32_t)*data >> (i * 8)) & 0xFF;
   }
 }
 
@@ -161,6 +168,16 @@ void setup() {
 
 void app_main(void) {
 
+  shift_data_func_t shift_data_func;
+
+  switch (__BYTE_ORDER) {
+  case BIG_ENDIAN:
+    shift_data_func = shift_data_be;
+    break;
+  case LITTLE_ENDIAN:
+    shift_data_func = shift_data_le;
+  }
+
   setup();
 
   if (ttn_resume_after_deep_sleep()) {
@@ -181,7 +198,7 @@ void app_main(void) {
   // xTaskCreate(read_from_hx711, "test", configMINIMAL_STACK_SIZE * 5, NULL, 5,
   // NULL);
 
-  read_from_hx711(NULL);
+  read_from_hx711(shift_data_func);
 
   ESP_LOGI(TAG_MAIN, "Preparing for deepsleep...");
 
