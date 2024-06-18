@@ -71,8 +71,6 @@ void sendMessages() {
   } else {
     ESP_LOGE(TAG_LORA, "Transmission failed.\n");
   }
-
-  return;
 }
 
 void read_from_hx711(shift_data_func_t shift_data_func) {
@@ -93,7 +91,7 @@ void read_from_hx711(shift_data_func_t shift_data_func) {
     return;
   }
 
-  ESP_LOGI(TAG_HX711, "Raw data: %" PRIi32, data);
+  ESP_LOGI(TAG_HX711, "Raw data: %d", data);
 
   // Sleep for 10 seconds
   vTaskDelay(pdMS_TO_TICKS(1000));
