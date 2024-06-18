@@ -47,16 +47,27 @@ Here are the key components required to build this device:
 - **HX711 Load Cell Amplifier:** Amplifies the small analog signal from the load cell and converts it to a digital signal.
 - **Articulated Rod-End Ball Joint:** Provides flexible connection points for the load cell to the lashing system.
 
-## Computer Setup
 
-### Steps to Configure HX711 and LoRaWAN
+## Steps to Configure HX711 and LoRaWAN
 
-**Choose correct pins and byteorder:**
+**Choose correct pins for SPI, byteorder and TX interval(in seconds):**
 ```c
+#define TTN_PIN_SPI_SCLK 5
+#define TTN_PIN_SPI_MOSI 27
+#define TTN_PIN_SPI_MISO 19
+#define TTN_PIN_NSS 18
+#define TTN_PIN_RXTX TTN_NOT_CONNECTED
+#define TTN_PIN_RST 14
+#define TTN_PIN_DIO0 26
+#define TTN_PIN_DIO1 35
+
+#define TX_INTERVAL 30
+
 #define DOUT_PIN 12
 #define PD_SCK_PIN 13
 #define LED_PIN 25
 #define __BYTE_ORDER LITTLE_ENDIAN
+
 ```
 ---
 
