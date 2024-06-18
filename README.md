@@ -90,8 +90,8 @@ Here are the key components required to build this device:
 2. **Connect the HX711 to the Heltec ESP32 V2**:
     - VCC: Connect to the 3.3V pin on the ESP32.
     - GND: Connect to a GND pin on the ESP32.
-    - DT (Data): Connect to GPIO 16 on the ESP32.
-    - SCK (Clock): Connect to GPIO 4 on the ESP32.
+    - DT (Data): Connect to GPIO 12 on the ESP32.
+    - SCK (Clock): Connect to GPIO 13 on the ESP32.
 
 ## Platform Setup
 Im using Chirpstack and a VPS hosted on Linode running Ubuntu.
