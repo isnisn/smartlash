@@ -7,9 +7,9 @@
 This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey. The project will take approximately 8-10 hours to complete.
 
 ## Objective
-* **Why you chose this project:** Ensuring the proper lashing of containers onboard ships is crucial for safety and preventing cargo damage.
-* **What purpose does it serve:** This project aims to alert the crew if the lashing slackens or fails, ensuring timely corrective measures.
-* **What insights you think it will give:** By monitoring the tension on container lashings continuously, we can reduce the risk of accidents and improve shipping safety protocols.
+* Ensuring the proper lashing of containers onboard ships is crucial for safety and preventing cargo damage.
+* This project aims to alert the crew if the lashing slackens or fails, ensuring timely corrective measures.
+* By monitoring the tension on container lashings continuously, we can reduce the risk of accidents and improve shipping safety protocols.
 
 ## Material
 
@@ -50,13 +50,33 @@ Here are the key components required to build this device:
 ## Computer Setup
 
 ### Chosen IDE and Steps
-1. **IDE Used:** Vim
-2. **Code Uploading:** Via idf.py
+
+1. **IDE Used:** Free of choice, I used vim
+2. **Code Uploading:** Using `idf.py`
 3. **Steps:**
-    - Install Arduino IDE.
-    - Install the HX711 library: Go to **Sketch** > **Include Library** > **Manage Libraries**, and search for HX711, then install.
-    - Connect the ESP32 to your computer via USB.
-    - Write and upload the code to the ESP32.
+
+    - Clone the ESP-IDF repository:
+        ```bash
+        git clone --recursive https://github.com/espressif/esp-idf.git
+        cd esp-idf
+        ```
+    - Install the ESP-IDF tools:
+        ```bash
+        ./install.sh
+        ```
+    - Set up the environment variables:
+        ```bash
+        . ./export.sh
+        ```
+    - Connect the Heltec ESP32 to your computer via USB.
+    - Open Vim and write your code.
+    - Save the code file in your project directory.
+    - Open a terminal in the project directory.
+    - Run `idf.py set-target esp32` to set the target to ESP32 (if not already set).
+    - Run `idf.py build` to compile the code.
+    - Run `idf.py flash` to upload the code to the ESP32.
+    - Optionally, run `idf.py monitor` to view the output from the ESP32 serial monitor.
+
 
 ## Putting Everything Together
 
@@ -82,7 +102,7 @@ I choose this platforms because I already had them. It could be scaled quite big
 
 ## The Code
 
-```cpp
+```c
 /** 
  * This function shifts the bits of an integer and stores each byte into an array. Prepping it for being sent over LoRaWAN.
  *
@@ -114,18 +134,11 @@ The loop reads and prints the weight data from the load cell every second.
 
 ## Transmitting the Data / Connectivity
 ### Data Transmission
-How often is the data sent?
 
-Which wireless protocols did you use (WiFi, LoRa, etc …)?
-
-Which transport protocols were used (MQTT, webhook, etc …)
-
-*Elaborate on the design choices regarding data transmission and wireless protocols. That is how your choices affect the device range and battery consumption.
-
-The data is sent every 15 minutes over LoRaWAN using Helium network and Chirpstack. LoRaWAN is best suited here imo because of the low amount of data being sent, also the battery life is increasing due to not using wifi. The data is transmitted over LoRaWAN(routed in the Helium network) to Chirpstack. 
+The data is sent every 15 minutes(changed in code) over LoRaWAN using Helium network and Chirpstack. LoRaWAN is best suited here imo because of the low amount of data being sent, also the battery life is increasing due to not using wifi. The data is transmitted over LoRaWAN(routed in the Helium network) to Chirpstack. 
 
 #### Simple socket with HTTP
-Im using a simple python script that listens on data being sent from a Chirpstack(by HTTP) by posting to the socket on my VPS. The server then uses a library for Python called InfluxDBClient, that insert a Point-object in the influx database.
+Using a simple python script that listens on data being sent from a Chirpstack(by HTTP) by posting to the socket on my VPS. The server then uses a library for Python called InfluxDBClient, that insert a Point-object in the influx database.
 
 #### Battery life and range
 Well, the battery life is way better with LoRaWAN than traditional wifi. The range is also better considering the might be installed on a boat/ship that could be very long, and the signal is being transmitted through thick walls. Wifi might end up short here, a simple Dragino or RAK gateway installed on the boat/ship would to the job. LoRaWAN radio signals also utilizes sub-ghz bandwidth allowing better penetration through different materials.
@@ -147,26 +160,6 @@ I choose influxdb because its a time-series database. I could have choosen mongo
 Dashboard: Built using InfluxDB V2.
 Data Preservation: Data stored in a InfluxDB instance to be preserved over long durations.
 
-
-Sample Dashboard
-ALT
-Image failed to load
-
-Note: Replace with an actual image
-
-Data Automation
-Set triggers for alerts when the lashing force drops below a threshold.
-Finalizing the Design
-Results and Reflections
-The final project achieved its goal of detecting lashing tension. Future improvements could include better shielding for noise reduction and enhanced calibration routines.
-
-ALT
-Image failed to load
-
-Note: Replace with an actual image
-
-Video Presentation
-A video presentation link here.
 
 With this guide, you should be able to build and monitor a smart lashing system for onboard ship containers, ensuring cargo safety during transit.
 
