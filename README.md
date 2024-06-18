@@ -104,10 +104,11 @@ I choose this platforms because I already had them. It could be scaled quite big
 
 ```c
 /** 
- * This function shifts the bits of an integer and stores each byte into an array. Prepping it for being sent over LoRaWAN.
+ * This function shifts the bits of an 32 bit signed integer and stores each byte into an array. Prepping it for being sent over LoRaWAN.
  *
  * The function `shift_data` takes a pointer to a 32-bit signed integer (`int32_t`) and shifts
- * the bits to separate each byte. It stores each resulting byte into the `msgData` array.
+ * the bits to separate each byte, thus prepping it for being sent over LoRaWAN.
+ * It stores each resulting byte into the `msgData` array.
 
  *      - During each iteration:
  *          - The dereferenced value of `data` is bitwise right-shifted by `(i * 8)` bits. 
@@ -126,11 +127,9 @@ static void shift_data(const int32_t *data)
     }
 }
 
+
 ```
 
-## Explanation
-The setup initializes the serial communication and HX711.
-The loop reads and prints the weight data from the load cell every second.
 
 ## Transmitting the Data / Connectivity
 ### Data Transmission
@@ -150,7 +149,7 @@ MQTT: Efficient for low-bandwidth communications.
 ## Presenting the Data
 ### Dashboard
 #### Dashboard built using InfluxDB own dashboard tool
-![dashboard](https://hackmd.io/_uploads/B1Nt5ykHC.png)
+![dashboard](doc/1.png)
 
 ### How often is data saved in the database.
 The data is put into buckets with a retention period of 30 days.
