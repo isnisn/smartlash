@@ -1,3 +1,6 @@
+Certainly! Here's the entire content wrapped continuously in a code block starting from where you requested:
+
+```markdown
 # Building a Smart Lashing Detection System
 
 **Name:** Andreas Nilsson  
@@ -51,7 +54,7 @@ Here are the key components required to build this device:
 
 ### Chosen IDE and Steps
 
-1. **IDE Used:** Free of choice, I used vim
+1. **IDE Used:** Free of choice, I used Vim
 2. **Code Uploading:** Using `idf.py`
 3. **Steps:**
 
@@ -77,8 +80,68 @@ Here are the key components required to build this device:
     - Run `idf.py flash` to upload the code to the ESP32.
     - Optionally, run `idf.py monitor` to view the output from the ESP32 serial monitor.
 
+---
 
-## Putting Everything Together
+### Steps to Configure HX711 and LoRaWAN
+
+**Include necessary headers:**
+```c
+#include "driver/gpio.h"
+#include "esp_event.h"
+#include "esp_sleep.h"
+#include "freertos/FreeRTOS.h"
+#include "nvs_flash.h"
+#include <esp_log.h>
+#include <hx711.h>
+#include "ttn.h"
+```
+
+**Declare function prototypes and data variables:**
+```c
+typedef void (*shift_data_func_t)(const int32_t *);
+static uint8_t msgData[4];
+static const char *TAG_LORA = "LoRaWAN:";
+static const char *TAG_HX711 = "HX711:";
+static const char *TAG_MAIN = "Main:";
+hx711_t dev = {.dout = 12, .pd_sck = 13, .gain = HX711_GAIN_A_64};
+shift_data_func_t shift_data_func;
+```
+
+**Define the shift data functions:**
+```c
+static void shift_data_le(const int32_t *data) {
+  for (int i = 0; i < sizeof(msgData); ++i) {
+    msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
+  }
+}
+
+static void shift_data_be(const int32_t *data) {
+  for (int i = 0; i < sizeof(msgData); ++i) {
+    msgData[sizeof(msgData) - 1 - i] = ((int32_t)*data >> (i * 8)) & 0xFF;
+}
+
+/**
+* The function pointer points to either of the functions depending on chosen byte order.
+*/
+typedef void (*shift_data_func_t)(const int32_t *);
+...
+
+shift_data_func_t shift_data_func;
+
+switch (__BYTE_ORDER) {
+case BIG_ENDIAN:
+  shift_data_func = shift_data_be;
+  break;
+case LITTLE_ENDIAN:
+  shift_data_func = shift_data_le;
+}
+...
+read_from_hx711(shift_data_func);
+```
+
+---
+
+### Putting Everything Together
 
 ### Circuit Diagram and Wiring
 1. **Connect the Load Cell to the HX711 Amplifier**:
@@ -93,19 +156,24 @@ Here are the key components required to build this device:
     - DT (Data): Connect to GPIO 12 on the ESP32.
     - SCK (Clock): Connect to GPIO 13 on the ESP32.
 
-## Platform Setup
-Im using Chirpstack and a VPS hosted on Linode running Ubuntu.
-https://console.helium-iot.xyz/
-https://cloud.linode.com/
+---
 
-I choose this platforms because I already had them. It could be scaled quite big.
+### Platform Setup
+I am using Chirpstack and a VPS hosted on Linode running Ubuntu.
+
+- [Chirpstack](https://console.helium-iot.xyz/)
+- [Linode](https://cloud.linode.com/)
+
+I chose these platforms because I already had them, and they could be scaled significantly.
+
+---
 
 ## The Code
 
 ```c
 /** 
- * This functions shifts the bits of an 32 bit signed integer and stores each byte into an array
- . Prepping it for being sent over LoRaWAN, depends on ur choice of the __BYTE_ORDER macro.
+ * This function shifts the bits of a 32-bit signed integer and stores each byte into an array,
+ * prepping it for being sent over LoRaWAN, depending on your choice of the __BYTE_ORDER macro.
  *
  *      - During each iteration:
  *          - The dereferenced value of `data` is bitwise right-shifted by `(i * 8)` bits. 
@@ -116,7 +184,6 @@ I choose this platforms because I already had them. It could be scaled quite big
  *          - The isolated byte is then stored in the `msgData` array at index `i`.
  *          This results in filling the `msgData` array with individual bytes from the input integer.
  */
-
 static void shift_data_le(const int32_t *data) {
   for (int i = 0; i < sizeof(msgData); ++i) {
     msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
@@ -126,58 +193,64 @@ static void shift_data_le(const int32_t *data) {
 static void shift_data_be(const int32_t *data) {
   for (int i = 0; i < sizeof(msgData); ++i) {
     msgData[sizeof(msgData) - 1 - i] = ((int32_t)*data >> (i * 8)) & 0xFF;
-  }
 }
 
 /**
-* The function pointer points to either of the functions depending on choosen byteorder.
+* The function pointer points to either of the functions depending on chosen byte order.
 */
-  typedef void (*shift_data_func_t)(const int32_t *);
+typedef void (*shift_data_func_t)(const int32_t *);
 ...
 
-  shift_data_func_t shift_data_func;
+shift_data_func_t shift_data_func;
 
-  switch (__BYTE_ORDER) {
-  case BIG_ENDIAN:
-    shift_data_func = shift_data_be;
-    break;
-  case LITTLE_ENDIAN:
-    shift_data_func = shift_data_le;
-  }
+switch (__BYTE_ORDER) {
+case BIG_ENDIAN:
+  shift_data_func = shift_data_be;
+  break;
+case LITTLE_ENDIAN:
+  shift_data_func = shift_data_le;
+}
 ...
-  read_from_hx711(shift_data_func);
-
+read_from_hx711(shift_data_func);
 ```
 
+---
 
-## Transmitting the Data / Connectivity
+### Transmitting the Data / Connectivity
 ### Data Transmission
 
-The data is sent every 15 minutes(changed in code) over LoRaWAN using Helium network and Chirpstack. LoRaWAN is best suited here imo because of the low amount of data being sent, also the battery life is increasing due to not using wifi. The data is transmitted over LoRaWAN(routed in the Helium network) to Chirpstack. 
+The data is sent every 15 minutes (can be changed in code) over LoRaWAN using the Helium network and Chirpstack. LoRaWAN is best suited here because of the low amount of data being sent and the improved battery life due to not using Wi-Fi. The data is transmitted over LoRaWAN (routed in the Helium network) to Chirpstack.
 
-#### Simple socket with HTTP
-Using a simple python script that listens on data being sent from a Chirpstack(by HTTP) by posting to the socket on my VPS. The server then uses a library for Python called InfluxDBClient, that insert a Point-object in the influx database.
+#### Simple Socket with HTTP
+Using a simple Python script that listens for data sent from Chirpstack (via HTTP) by posting to the socket on my VPS. The server then uses a library called InfluxDBClient to insert a Point object in the Influx database.
 
-#### Battery life and range
-Well, the battery life is way better with LoRaWAN than traditional wifi. The range is also better considering the might be installed on a boat/ship that could be very long, and the signal is being transmitted through thick walls. Wifi might end up short here, a simple Dragino or RAK gateway installed on the boat/ship would to the job. LoRaWAN radio signals also utilizes sub-ghz bandwidth allowing better penetration through different materials.
+#### Battery Life and Range
+The battery life is significantly better with LoRaWAN than traditional Wi-Fi. The range is also better considering that it might be installed on a boat/ship which could be very long, and the signal is being transmitted through thick walls. Wi-Fi might end up short here; a simple Dragino or RAK gateway installed on the boat/ship would do the job. LoRaWAN radio signals also utilize sub-GHz bandwidth, allowing better penetration through different materials.
+
+---
 
 ## Design Choices
-LoRaWAN: Chosen for its long range and low power consumption, suitable for maritime environments.
-MQTT: Efficient for low-bandwidth communications.
+**LoRaWAN:** Chosen for its long range and low power consumption, suitable for maritime environments.
+**MQTT:** Efficient for low-bandwidth communications.
+
+---
 
 ## Presenting the Data
 ### Dashboard
-#### Dashboard built using InfluxDB own dashboard tool
+#### Dashboard built using InfluxDB's own dashboard tool
 ![dashboard](doc/1.png)
 
-### How often is data saved in the database.
+### Data Retention
 The data is put into buckets with a retention period of 30 days.
-I choose influxdb because its a time-series database. I could have choosen mongodb or other time-series but I find influxdb easiest to work with.
+I chose InfluxDB because it's a time-series database. I could have chosen MongoDB or other time-series databases, but I find InfluxDB the easiest to work with.
+
+---
 
 ## Dashboard and Database
-Dashboard: Built using InfluxDB V2.
-Data Preservation: Data stored in a InfluxDB instance to be preserved over long durations.
+**Dashboard:** Built using InfluxDB V2.  
+**Data Preservation:** Data stored in an InfluxDB instance to be preserved over long durations.
 
+---
 
 With this guide, you should be able to build and monitor a smart lashing system for onboard ship containers, ensuring cargo safety during transit.
-
+```
