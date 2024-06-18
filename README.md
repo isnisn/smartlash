@@ -2,10 +2,10 @@
 
 **Name:** Andreas Nilsson  
 **Student Credentials:** an224qi
-Time to setup ~1 hour
+**Time to setup:** ~1 hour
 
 ## Short Project Overview
-This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey. The project will take approximately 8-10 hours to complete.
+This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey.
 
 ## Objective
 * Ensuring the proper lashing of containers onboard ships is crucial for safety and preventing cargo damage.
