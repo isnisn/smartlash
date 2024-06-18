@@ -49,6 +49,33 @@ Here are the key components required to build this device:
 
 ## Computer Setup
 
+### Steps to Configure HX711 and LoRaWAN
+
+**Choose correct pins and byteorder:**
+```c
+#define DOUT_PIN 12
+#define PD_SCK_PIN 13
+#define LED_PIN 25
+#define __BYTE_ORDER LITTLE_ENDIAN
+```
+---
+
+### Putting Everything Together
+
+### Circuit Diagram and Wiring
+1. **Connect the Load Cell to the HX711 Amplifier**:
+    - Red (E+): Connect to E+ on HX711.
+    - Black (E-): Connect to E- on HX711.
+    - White (A-): Connect to A- on HX711.
+    - Green (A+): Connect to A+ on HX711.
+
+2. **Connect the HX711 to the Heltec ESP32 V2**:
+    - VCC: Connect to the 3.3V pin on the ESP32.
+    - GND: Connect to a GND pin on the ESP32.
+    - DT (Data): Connect to GPIO 12 on the ESP32.
+    - SCK (Clock): Connect to GPIO 13 on the ESP32.
+
+---
 ### Chosen IDE and Steps
 
 1. **IDE Used:** Free of choice, I used Vim
@@ -68,10 +95,7 @@ Here are the key components required to build this device:
         ```bash
         . ./export.sh
         ```
-    - Connect the Heltec ESP32 to your computer via USB.
-    - Open Vim and write your code.
-    - Save the code file in your project directory.
-    - Open a terminal in the project directory.
+    - Connect the Heltec ESP32 to your computer via USB
     - Run `idf.py set-target esp32` to set the target to ESP32 (if not already set).
     - Run `idf.py build` to compile the code.
     - Run `idf.py flash` to upload the code to the ESP32.
@@ -79,81 +103,6 @@ Here are the key components required to build this device:
 
 ---
 
-### Steps to Configure HX711 and LoRaWAN
-
-**Include necessary headers:**
-```c
-#include "driver/gpio.h"
-#include "esp_event.h"
-#include "esp_sleep.h"
-#include "freertos/FreeRTOS.h"
-#include "nvs_flash.h"
-#include <esp_log.h>
-#include <hx711.h>
-#include "ttn.h"
-```
-
-**Declare function prototypes and data variables:**
-```c
-typedef void (*shift_data_func_t)(const int32_t *);
-static uint8_t msgData[4];
-static const char *TAG_LORA = "LoRaWAN:";
-static const char *TAG_HX711 = "HX711:";
-static const char *TAG_MAIN = "Main:";
-hx711_t dev = {.dout = 12, .pd_sck = 13, .gain = HX711_GAIN_A_64};
-shift_data_func_t shift_data_func;
-```
-
-**Define the shift data functions:**
-```c
-static void shift_data_le(const int32_t *data) {
-  for (int i = 0; i < sizeof(msgData); ++i) {
-    msgData[i] = ((int32_t)*data >> (i * 8)) & 0xFF;
-  }
-}
-
-static void shift_data_be(const int32_t *data) {
-  for (int i = 0; i < sizeof(msgData); ++i) {
-    msgData[sizeof(msgData) - 1 - i] = ((int32_t)*data >> (i * 8)) & 0xFF;
-}
-
-/**
-* The function pointer points to either of the functions depending on chosen byte order.
-*/
-typedef void (*shift_data_func_t)(const int32_t *);
-...
-
-shift_data_func_t shift_data_func;
-
-switch (__BYTE_ORDER) {
-case BIG_ENDIAN:
-  shift_data_func = shift_data_be;
-  break;
-case LITTLE_ENDIAN:
-  shift_data_func = shift_data_le;
-}
-...
-read_from_hx711(shift_data_func);
-```
-
----
-
-### Putting Everything Together
-
-### Circuit Diagram and Wiring
-1. **Connect the Load Cell to the HX711 Amplifier**:
-    - Red (E+): Connect to E+ on HX711.
-    - Black (E-): Connect to E- on HX711.
-    - White (A-): Connect to A- on HX711.
-    - Green (A+): Connect to A+ on HX711.
-
-2. **Connect the HX711 to the Heltec ESP32 V2**:
-    - VCC: Connect to the 3.3V pin on the ESP32.
-    - GND: Connect to a GND pin on the ESP32.
-    - DT (Data): Connect to GPIO 12 on the ESP32.
-    - SCK (Clock): Connect to GPIO 13 on the ESP32.
-
----
 
 ### Platform Setup
 I am using Chirpstack and a VPS hosted on Linode running Ubuntu.
