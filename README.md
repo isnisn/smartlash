@@ -1,6 +1,3 @@
-Certainly! Here's the entire content wrapped continuously in a code block starting from where you requested:
-
-```markdown
 # Building a Smart Lashing Detection System
 
 **Name:** Andreas Nilsson  
