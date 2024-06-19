@@ -19,14 +19,13 @@
 // 'idf.py menuconfig'. Go to Components / The Things Network, select the
 // appropriate values and save.
 
-// Copy the below hex strings from the TTN console (Applications > Your
-// application > End devices > Your device > Activation information)
+// Copy the below hex strings from the Helium console or TTN
 
 // AppEUI (sometimes called JoinEUI)
 const char *appEui = "05c2660247e3113f";
 // DevEUI
 const char *devEui = "c496422c5c2a7f78";
-// AppKey
+// AppKey (Replace with your appkey, this appkey is random and not in use)
 const char *appKey = "27e52edcd7015d465b955173ac8eb150";
 
 // Pins and other resources
@@ -192,9 +191,6 @@ void app_main(void) {
   }
 
   ESP_LOGI(TAG_HX711, "Starting read from HX711...");
-
-  // xTaskCreate(read_from_hx711, "test", configMINIMAL_STACK_SIZE * 5, NULL, 5,
-  // NULL);
 
   read_from_hx711(shift_data_func);
   sendMessages();

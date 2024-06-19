@@ -2,10 +2,10 @@
 
 **Name:** Andreas Nilsson  
 **Student Credentials:** an224qi
-Time to setup ~1 hour
+**Time to setup:** ~1 hour
 
 ## Short Project Overview
-This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey. The project will take approximately 8-10 hours to complete.
+This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey.
 
 ## Objective
 * Ensuring the proper lashing of containers onboard ships is crucial for safety and preventing cargo damage.
@@ -132,7 +132,54 @@ I chose these platforms because I already had them, and they could be scaled sig
 ---
 
 ## The Code
+### Setup and Helium. 
+In the app_main function, we first call the setup function to initialize various components such as GPIO pins, SPI bus, TTN/Helium settings, and the HX711 device. This initialization process sets up the necessary configurations and prepares the device for operation. 
 
+#### Data Shifting Function Selection
+
+The setup function begins by selecting the appropriate shift_data function based on the system's byte order (endian format). This is done using __BYTE_ORDER, which checks if the system is Big Endian or Little Endian and sets shift_data_func.
+
+#### GPIO Configuration
+
+The function configures the LED_PIN and another pin (26) as outputs. These pins are then set to a low level (turned off if active low).
+
+#### TTN/Helium Initialization
+
+- The GPIO ISR handler service is initialized, which provides routines to manage GPIO interrupt service routines.
+- The NVS (Non-Volatile Storage) flash is initialized. This allows for saving and restoring keys.
+- The SPI bus is initialized with the given pin configuration for MISO, MOSI, and SCLK.
+- TTN (Using Helium, but lib is called TTN) is initialized and configured with the necessary pins for the SX127x LoRa module.
+- The device is provisioned with the DevEUI, AppEUI, and AppKey. The line that provisions the device can be commented out after the first successful run because the data is saved in NVS.
+- The function enables Adaptive Data Rate (ADR), sets the data rate, and sets the maximum transmit power.
+
+#### HX711 Initialization
+The HX711 load cell amplifier is initialized for reading data from the load cell.
+
+#### Deep Sleep Resume Check
+The code checks if the device has resumed from deep sleep using ttn_resume_after_deep_sleep(). If true, it logs that resumption has occurred.
+
+#### TTN Joining
+If the device has not resumed from deep sleep, it attempts to join the TTN network. If the join is successful, it logs this; otherwise, it logs an error and exits the function.
+
+#### Starting HX711 Read
+It logs that reading from the HX711 sensor is starting. The read_from_hx711 function is called with the appropriate data shifting function. This reads the data from the HX711 sensor and applies the endian-specific byte shifting.
+
+#### Sending Messages
+The sendMessages function is called to send the read data over the network.
+
+#### Preparing for Deep Sleep
+The function logs that the device is preparing for deep sleep.
+It waits for TTN communication to become idle and prepares the TTN component for deep sleep.
+The timer wake-up interval is set to TX_INTERVAL seconds.
+
+#### Powering Down HX711
+The HX711 is powered down, and the function logs whether the operation was successful or not.
+
+#### Delay and Enter Deep Sleep
+The code delays for one second before logging that it is entering deep sleep for the specified interval.
+The device then enters deep sleep mode using esp_deep_sleep_start(), conserving power until the next scheduled wake-up.
+
+### Sending the payload
 ```c
 /** 
  * This function shifts the bits of a 32-bit signed integer and stores each byte into an array,
@@ -175,6 +222,8 @@ case LITTLE_ENDIAN:
 }
 ...
 read_from_hx711(shift_data_func);
+...
+sendMessages();
 ```
 
 ---
