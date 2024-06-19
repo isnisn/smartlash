@@ -93,7 +93,6 @@ Connect everything on a breadboard.
 ---
 
 ### Chosen IDE and Steps
-
 **IDE Used:** Free of choice, I used Vim
 **Code Uploading:** Using `idf.py`
 **Steps:**
