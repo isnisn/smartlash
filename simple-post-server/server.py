@@ -1,7 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import os
-import paho.mqtt.client as mqtt
 import struct
 import influxdb_client, os, time
 import requests
