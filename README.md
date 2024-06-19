@@ -249,7 +249,7 @@ The battery life is significantly better with LoRaWAN than traditional Wi-Fi. Th
 
 ## Presenting the Data
 ### Dashboard
-#### Dashboard built using InfluxDB's own dashboard tool
+#### Dashboard built using Grafana
 ![dashboard](doc/3.png)
 
 ### Data Retention
