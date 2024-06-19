@@ -93,29 +93,50 @@ Connect everything on a breadboard.
 ---
 
 ### Chosen IDE and Steps
-**IDE Used:** Free of choice, I used Vim
-**Code Uploading:** Using `idf.py`
+**IDE Used:** Free of choice, I used Vim  
+**Code Uploading:** Using `idf.py`  
+
 **Steps:**
-1.
-    - Clone the ESP-IDF repository:
-        ```bash
-        git clone --recursive https://github.com/espressif/esp-idf.git
-        cd esp-idf
-        ```
-    - Install the ESP-IDF tools:
-        ```bash
-        ./install.sh
-        ```
-    - Set up the environment variables:
-        ```bash
-        . ./export.sh
-        ```
-    - Connect the Heltec ESP32 to your computer via USB
-    - cd to this projects root-folder
-    - Run `idf.py set-target esp32` to set the target to ESP32 (if not already set).
-    - Run `idf.py build` to compile the code.
-    - Run `idf.py flash` to upload the code to the ESP32.
-    - Run `idf.py monitor` to view the output from the ESP32 serial monitor.
+
+1. Clone the ESP-IDF repository:
+    ```bash
+    git clone --recursive https://github.com/espressif/esp-idf.git
+    cd esp-idf
+    ```
+
+2. Install the ESP-IDF tools:
+    ```bash
+    ./install.sh
+    ```
+
+3. Set up the environment variables:
+    ```bash
+    . ./export.sh
+    ```
+
+4. Connect the Heltec ESP32 to your computer via USB
+
+5. Change directory to your project's root folder
+
+6. Set the target to ESP32 (if not already set):
+    ```bash
+    idf.py set-target esp32
+    ```
+
+7. Compile the code:
+    ```bash
+    idf.py build
+    ```
+
+8. Upload the code to the ESP32:
+    ```bash
+    idf.py flash
+    ```
+
+9. View the output from the ESP32 serial monitor:
+    ```bash
+    idf.py monitor
+    ```
 
 ---
 
