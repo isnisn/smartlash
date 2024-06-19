@@ -192,9 +192,6 @@ void app_main(void) {
 
   ESP_LOGI(TAG_HX711, "Starting read from HX711...");
 
-  // xTaskCreate(read_from_hx711, "test", configMINIMAL_STACK_SIZE * 5, NULL, 5,
-  // NULL);
-
   read_from_hx711(shift_data_func);
   sendMessages();
 
