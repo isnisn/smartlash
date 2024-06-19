@@ -250,6 +250,7 @@ The battery life is significantly better with LoRaWAN than traditional Wi-Fi. Th
 ## Presenting the Data
 ### Dashboard
 #### Dashboard built using Grafana
+- Here we can see a three day journey with Calmare nyckel. The tension in the diagram isn't actually tension drop, its the load cell that is temperature sensitive.
 ![dashboard](doc/3.png)
 
 ### Data Retention
