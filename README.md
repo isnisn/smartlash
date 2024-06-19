@@ -177,6 +177,14 @@ Grab the pid and run:
 
 (Replace `python` with your python binary on your system.)
 
+### Testing it out
+#### Using CURL
+- Do a post-request to validate that you are getting data. Either using a `curl -X POST -d "{}" -h http://<your-ip-to-server-running-simplepostserver>`
+
+#### Using Chirpstack 
+- Simply watch the video and enter the details for HTTP integration in Chirpstack.
+
+---
 ### Platform Setup
 I am using Chirpstack and a VPS hosted on Linode running Ubuntu.
 
