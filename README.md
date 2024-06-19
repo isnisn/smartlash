@@ -5,7 +5,7 @@
 **Time to setup:** ~1 hour
 
 ## Short Project Overview
-This project involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey.
+This project written in ESP-IDF involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey.
 
 ## Objective
 * Ensuring the proper lashing of containers onboard ships is crucial for safety and preventing cargo damage.
@@ -40,13 +40,18 @@ Here are the key components required to build this device:
     - Price: ~€12
     - Shop: [Electrokit](https://www.electrokit.com/forstarkare-for-lastceller-hx711)
     - [Datasheet](https://www.electrokit.com/upload/product/41016/41016232/hx711_english.pdf)
+5. **Heltec V2 LoRa**
+   - Quantity: 1
+   - Price: ~€30
+     
 
-**Total Cost:** ~€526
+**Total Cost:** ~€556
 
 ### What the Different Components Do
 - **Load Cell:** Measures tension or compression force.
 - **HX711 Load Cell Amplifier:** Amplifies the small analog signal from the load cell and converts it to a digital signal.
 - **Articulated Rod-End Ball Joint:** Provides flexible connection points for the load cell to the lashing system.
+- **Heltec V2 LoRa:** The MCU featuring a ESP32 with an onboard SX1262 chip(The LoRa module). Responsible for executing the code and talk to the HX711 and SX1262 
 
 
 ### Putting Everything Together
@@ -152,6 +157,10 @@ I chose these platforms because I already had them, and they could be scaled sig
 ---
 
 ## The Code
+### Codebase
+The code is written in C using ESP-IDF so its portable to basically any device of your choice. Easiest would be to use a Heltec with a LoRa onboard chip(SX126x / 127x). 
+Ofcourse it will run directly on any ESP32 and by using a LoRa breakout board you can connect and configure it by SPI.
+
 ### Setup and Helium. 
 In the app_main function, we first call the setup function to initialize various components such as GPIO pins, SPI bus, TTN/Helium settings, and the HX711 device. This initialization process sets up the necessary configurations and prepares the device for operation. 
 
