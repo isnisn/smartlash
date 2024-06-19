@@ -201,19 +201,12 @@ The battery life is significantly better with LoRaWAN than traditional Wi-Fi. Th
 ## Presenting the Data
 ### Dashboard
 #### Dashboard built using InfluxDB's own dashboard tool
-![dashboard](doc/1.png)
+![dashboard](doc/3.png)
 
 ### Data Retention
 The data is put into buckets with a retention period of 30 days.
 I chose InfluxDB because it's a time-series database. I could have chosen MongoDB or other time-series databases, but I find InfluxDB the easiest to work with.
 
----
-
-## Dashboard and Database
-**Dashboard:** Built using InfluxDB V2.  
-**Data Preservation:** Data stored in an InfluxDB instance to be preserved over long durations.
-
----
 
 With this guide, you should be able to build and monitor a smart lashing system for onboard ship containers, ensuring cargo safety during transit.
 ```
