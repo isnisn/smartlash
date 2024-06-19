@@ -145,6 +145,37 @@ Connect everything on a breadboard.
 
 ---
 
+## Catching data with simple-post-server
+### Venv
+Open a new terminal, cd to this repo root directory and enter 
+1. `python -m venv simple-post-server`
+2. `cd simple-post-server`
+3. `source bin/activate`
+4. `pip install -r requirements.txt`
+
+### Influx settings
+In `server.py` insert your token, org, url and bucket obtained from your influxdb instance
+```python
+        token = ""
+        org = ""
+        url = ""
+        bucket = ""
+```
+
+### Running
+First you might want to check if its working, so run the python script normally.
+`python server.py`
+
+When its working enter this so it will run in the background.
+`nohup python3 server.py > /dev/null 2>&1 &`
+
+To kill the process you could do:
+`ps aux | grep server.py`
+
+Grab the pid and run:
+`kill -9 <pid>`
+
+(Replace `python` with your python binary on your system.)
 
 ### Platform Setup
 I am using Chirpstack and a VPS hosted on Linode running Ubuntu.
