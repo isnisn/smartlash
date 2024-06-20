@@ -4,6 +4,46 @@
 **Student Credentials:** an224qi
 **Time to setup:** ~1 hour
 
+# Table of Contents
+
+1. [Short Project Overview](#short-project-overview)
+2. [Objective](#objective)
+3. [Material](#material)
+   - [List of Material](#list-of-material)
+   - [What the Different Components Do](#what-the-different-components-do)
+4. [Requirements](#requirements)
+5. [Putting Everything Together](#putting-everything-together)
+6. [Steps to Configure HX711 and LoRaWAN](#steps-to-configure-hx711-and-lorawan)
+7. [Chosen IDE and Steps](#chosen-ide-and-steps)
+8. [Platform Setup](#platform-setup)
+9. [The Code (main.c)](#the-code-mainc)
+   - [Codebase](#codebase)
+   - [Setup and Helium.](#setup-and-helium)
+   - [Data Shifting Function Selection](#data-shifting-function-selection)
+   - [GPIO Configuration](#gpio-configuration)
+   - [TTN/Helium Initialization](#ttnhelium-initialization)
+   - [HX711 Initialization](#hx711-initialization)
+   - [Deep Sleep Resume Check](#deep-sleep-resume-check)
+   - [TTN Joining](#ttn-joining)
+   - [Starting HX711 Read](#starting-hx711-read)
+   - [Sending Messages](#sending-messages)
+   - [Preparing for Deep Sleep](#preparing-for-deep-sleep)
+   - [Powering Down HX711](#powering-down-hx711)
+   - [Delay and Enter Deep Sleep](#delay-and-enter-deep-sleep)
+   - [Transmitting the Data / Connectivity](#transmitting-the-data--connectivity)
+   - [Data Transmission](#data-transmission)
+10. [Catching data with simple-post-server](#catching-data-with-simple-post-server)
+    - [Simple Socket with HTTP](#simple-socket-with-http)
+    - [Venv](#venv)
+    - [Influx settings](#influx-settings)
+    - [Running](#running)
+    - [Testing it out](#testing-it-out)
+    - [Battery Life and Range](#battery-life-and-range)
+11. [Design Choices](#design-choices)
+12. [Presenting the Data](#presenting-the-data)
+    - [Dashboard](#dashboard)
+    - [Data Retention](#data-retention)
+
 ## Short Project Overview
 This project written in ESP-IDF involves assembling and configuring a system that uses load cells to detect whether lashing is executed correctly and remains secure throughout a shipping journey.
 
