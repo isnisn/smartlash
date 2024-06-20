@@ -101,7 +101,7 @@ Connect everything on a breadboard.
 #define DOUT_PIN 12
 #define PD_SCK_PIN 13
 #define LED_PIN 25
-#define __BYTE_ORDER LITTLE_ENDIAN
+#define BYTE_ORDER LITTLE_ENDIAN
 
 ```
 ---
@@ -214,7 +214,7 @@ In the app_main function, we first call the setup function to initialize various
 
 #### Data Shifting Function Selection
 
-The setup function begins by selecting the appropriate shift_data function based on the system's byte order (endian format). This is done using __BYTE_ORDER, which checks if the system is Big Endian or Little Endian and sets shift_data_func.
+The setup function begins by selecting the appropriate shift_data function based on the system's byte order (endian format). This is done using BYTE_ORDER, which checks if the system is Big Endian or Little Endian and sets shift_data_func.
 
 #### GPIO Configuration
 
@@ -260,7 +260,7 @@ The device then enters deep sleep mode using esp_deep_sleep_start(), conserving 
 ```c
 /** 
  * This function shifts the bits of a 32-bit signed integer and stores each byte into an array,
- * prepping it for being sent over LoRaWAN, depending on your choice of the __BYTE_ORDER macro.
+ * prepping it for being sent over LoRaWAN, depending on your choice of the BYTE_ORDER macro.
  *
  *      - During each iteration:
  *          - The dereferenced value of `data` is bitwise right-shifted by `(i * 8)` bits. 
@@ -290,7 +290,7 @@ typedef void (*shift_data_func_t)(const int32_t *);
 
 shift_data_func_t shift_data_func;
 
-switch (__BYTE_ORDER) {
+switch (BYTE_ORDER) {
 case BIG_ENDIAN:
   shift_data_func = shift_data_be;
   break;
