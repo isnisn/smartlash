@@ -163,7 +163,7 @@ Open a new terminal, cd to this repo root directory and enter
 4. `pip install -r requirements.txt`
 
 ### Influx settings
-In `[server.py](./simple-post-server/server.py)` insert your token, org, url and bucket obtained from your influxdb instance
+In [server.py](./simple-post-server/server.py) insert your token, org, url and bucket obtained from your influxdb instance
 ```python
         token = ""
         org = ""
@@ -204,7 +204,7 @@ I chose these platforms because I already had them, and they could be scaled sig
 
 ---
 
-## The Code (In ./main/main.c)
+## The Code ([main.c](./main/main.c))
 ### Codebase
 The code is written in C using ESP-IDF so its portable to basically any device of your choice. Easiest would be to use a Heltec with a LoRa onboard chip(SX126x / 127x). 
 Ofcourse it will run directly on any ESP32 and by using a LoRa breakout board you can connect and configure it by SPI.
