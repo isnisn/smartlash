@@ -153,47 +153,6 @@ Connect everything on a breadboard.
     ```
 
 ---
-
-## Catching data with simple-post-server
-### Venv
-Open a new terminal, cd to this repo root directory and enter 
-1. `python -m venv simple-post-server`
-2. `cd simple-post-server`
-3. `source bin/activate`
-4. `pip install -r requirements.txt`
-
-### Influx settings
-In [server.py](./simple-post-server/server.py) insert your token, org, url and bucket obtained from your influxdb instance
-```python
-        token = ""
-        org = ""
-        url = ""
-        bucket = ""
-```
-
-### Running
-First you might want to check if its working, so run the python script normally.
-`python server.py`
-
-When its working enter this so it will run in the background.
-`nohup python3 server.py > /dev/null 2>&1 &`
-
-To kill the process you could do:
-`ps aux | grep server.py`
-
-Grab the pid and run:
-`kill -9 <pid>`
-
-(Replace `python` with your python binary on your system.)
-
-### Testing it out
-#### Using CURL
-- Do a post-request to validate that you are getting data. Either using a `curl -X POST -d "{}" -h http://<your-ip-to-server-running-simplepostserver>`
-
-#### Using Chirpstack 
-- Simply watch the video and enter the details for HTTP integration in Chirpstack.
-
----
 ### Platform Setup
 I am using Chirpstack and a VPS hosted on Linode running Ubuntu.
 
@@ -307,8 +266,48 @@ sendMessages();
 
 ---
 
-#### Simple Socket with HTTP
+## Catching data with simple-post-server
+### Simple Socket with HTTP
 Using a simple Python script that listens for data sent from Chirpstack (via HTTP) by posting to the socket on my VPS. The server then uses a library called InfluxDBClient to insert a Point object in the Influx database.
+
+### Venv
+Open a new terminal, cd to this repo root directory and enter 
+1. `python -m venv simple-post-server`
+2. `cd simple-post-server`
+3. `source bin/activate`
+4. `pip install -r requirements.txt`
+
+### Influx settings
+In [server.py](./simple-post-server/server.py) insert your token, org, url and bucket obtained from your influxdb instance
+```python
+        token = ""
+        org = ""
+        url = ""
+        bucket = ""
+```
+
+### Running
+First you might want to check if its working, so run the python script normally.
+`python server.py`
+
+When its working enter this so it will run in the background.
+`nohup python3 server.py > /dev/null 2>&1 &`
+
+To kill the process you could do:
+`ps aux | grep server.py`
+
+Grab the pid and run:
+`kill -9 <pid>`
+
+(Replace `python` with your python binary on your system.)
+
+### Testing it out
+#### Using CURL
+- Do a post-request to validate that you are getting data. Either using a `curl -X POST -d "{}" -h http://<your-ip-to-server-running-simplepostserver>`
+
+#### Using Chirpstack 
+- Simply watch the video and enter the details for HTTP integration in Chirpstack.
+
 
 #### Battery Life and Range
 The battery life is significantly better with LoRaWAN than traditional Wi-Fi. The range is also better considering that it might be installed on a boat/ship which could be very long, and the signal is being transmitted through thick walls. Wi-Fi might end up short here; a simple Dragino or RAK gateway installed on the boat/ship would do the job. LoRaWAN radio signals also utilize sub-GHz bandwidth, allowing better penetration through different materials.
