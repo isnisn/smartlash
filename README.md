@@ -256,7 +256,9 @@ The HX711 is powered down, and the function logs whether the operation was succe
 The code delays for one second before logging that it is entering deep sleep for the specified interval.
 The device then enters deep sleep mode using esp_deep_sleep_start(), conserving power until the next scheduled wake-up.
 
-### Sending the payload
+### Transmitting the Data / Connectivity
+### Data Transmission
+The data is sent every 15 minutes (can be changed in code, `TX_INTERVAL`) over LoRaWAN using the Helium network and Chirpstack. LoRaWAN is best suited here because of the low amount of data being sent and the improved battery life due to not using Wi-Fi. The data is transmitted over LoRaWAN (routed in the Helium network) to Chirpstack.
 ```c
 /** 
  * This function shifts the bits of a 32-bit signed integer and stores each byte into an array,
@@ -304,11 +306,6 @@ sendMessages();
 ```
 
 ---
-
-### Transmitting the Data / Connectivity
-### Data Transmission
-
-The data is sent every 15 minutes (can be changed in code) over LoRaWAN using the Helium network and Chirpstack. LoRaWAN is best suited here because of the low amount of data being sent and the improved battery life due to not using Wi-Fi. The data is transmitted over LoRaWAN (routed in the Helium network) to Chirpstack.
 
 #### Simple Socket with HTTP
 Using a simple Python script that listens for data sent from Chirpstack (via HTTP) by posting to the socket on my VPS. The server then uses a library called InfluxDBClient to insert a Point object in the Influx database.
