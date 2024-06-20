@@ -12,6 +12,9 @@ This project written in ESP-IDF involves assembling and configuring a system tha
 * This project aims to alert the crew if the lashing slackens or fails, ensuring timely corrective measures.
 * By monitoring the tension on container lashings continuously, we can reduce the risk of accidents and improve shipping safety protocols.
 
+## Map
+![Map](doc/4.png)
+
 ## Material
 
 ### List of Material
@@ -53,6 +56,12 @@ Here are the key components required to build this device:
 - **Articulated Rod-End Ball Joint:** Provides flexible connection points for the load cell to the lashing system.
 - **Heltec V2 LoRa:** The MCU featuring a ESP32 with an onboard SX1262 chip(The LoRa module). Responsible for executing the code and talk to the HX711 and SX1262 
 
+## Requirements
+- A computer running macos, linux och windows. Host influxdb either locally or on a VPS(Virtual private server)
+- Materials above
+- Breadboard
+- Connection wire
+- USB -> micro-usb cable
 
 ### Putting Everything Together
 
@@ -154,7 +163,7 @@ Open a new terminal, cd to this repo root directory and enter
 4. `pip install -r requirements.txt`
 
 ### Influx settings
-In `server.py` insert your token, org, url and bucket obtained from your influxdb instance
+In `[server.py](./simple-post-server/server.py)` insert your token, org, url and bucket obtained from your influxdb instance
 ```python
         token = ""
         org = ""
@@ -195,7 +204,7 @@ I chose these platforms because I already had them, and they could be scaled sig
 
 ---
 
-## The Code
+## The Code (In ./main/main.c)
 ### Codebase
 The code is written in C using ESP-IDF so its portable to basically any device of your choice. Easiest would be to use a Heltec with a LoRa onboard chip(SX126x / 127x). 
 Ofcourse it will run directly on any ESP32 and by using a LoRa breakout board you can connect and configure it by SPI.
@@ -324,7 +333,6 @@ The battery life is significantly better with LoRaWAN than traditional Wi-Fi. Th
 ### Data Retention
 The data is put into buckets with a retention period of 30 days.
 I chose InfluxDB because it's a time-series database. I could have chosen MongoDB or other time-series databases, but I find InfluxDB the easiest to work with.
-
 
 With this guide, you should be able to build and monitor a smart lashing system for onboard ship containers, ensuring cargo safety during transit.
 ```

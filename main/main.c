@@ -7,12 +7,11 @@
 #include "esp_sleep.h"
 #include "freertos/FreeRTOS.h"
 #include "nvs_flash.h"
+#include "ttn.h"
 #include <esp_log.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <hx711.h>
-
-#include "ttn.h"
 
 // NOTE:
 // The LoRaWAN frequency and the radio chip must be configured by running
@@ -90,7 +89,7 @@ void read_from_hx711(shift_data_func_t shift_data_func) {
     return;
   }
 
-  ESP_LOGI(TAG_HX711, "Raw data: %d", data);
+  // ESP_LOGI(TAG_HX711, "Raw data: %d", data);
 
   // Sleep for 10 seconds
   vTaskDelay(pdMS_TO_TICKS(1000));
@@ -218,5 +217,6 @@ void app_main(void) {
 
   ESP_LOGI(TAG_MAIN, "Entering deep sleep for %d seconds", TX_INTERVAL);
 
+  esp_sleep_config_gpio_isolate();
   esp_deep_sleep_start();
 }
