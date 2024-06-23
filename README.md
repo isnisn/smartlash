@@ -122,6 +122,13 @@ Connect everything on a breadboard.
     - DT (Data): Connect to GPIO 12 on the ESP32.
     - SCK (Clock): Connect to GPIO 13 on the ESP32.
 
+
+### HX711
+![HX711](doc/5.png)
+
+### When completed
+![Completed](doc/4.png)
+
 ---
 ## Steps to Configure HX711 and LoRaWAN
 
