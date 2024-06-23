@@ -127,7 +127,7 @@ Connect everything on a breadboard.
 ![HX711](doc/5.png)
 
 ### When completed
-![Completed](doc/4.png)
+![Completed](doc/6.png)
 
 ---
 ## Steps to Configure HX711 and LoRaWAN
