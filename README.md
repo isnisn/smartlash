@@ -124,7 +124,7 @@ Connect everything on a breadboard.
 
 
 ### HX711
-![HX711](doc/5.png)
+![HX711](doc/7.png)
 
 ### When completed
 ![Completed](doc/6.png)
