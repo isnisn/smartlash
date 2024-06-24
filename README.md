@@ -123,11 +123,18 @@ Connect everything on a breadboard.
     - SCK (Clock): Connect to GPIO 13 on the ESP32.
 
 
+
 ### HX711
 ![HX711](doc/7.png)
 
 ### When completed
 ![Completed](doc/6.png)
+
+![Finished](doc/8.png)
+
+![Finished](doc/9.png)
+
+![Finished](doc/10.png)
 
 ---
 ## Steps to Configure HX711 and LoRaWAN
