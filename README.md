@@ -130,10 +130,13 @@ Connect everything on a breadboard.
 ### When completed
 ![Completed](doc/6.png)
 
+### Microcontroller with the HX711 on the breadboard next to the Vetek loadcell
 ![Finished](doc/8.png)
 
+### Cargo strapped down with the loadcell on top
 ![Finished](doc/9.png)
 
+### The actual load cell mounted
 ![Finished](doc/10.png)
 
 ---
