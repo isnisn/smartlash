@@ -1,9 +1,5 @@
 # Building a Smart Lashing Detection System
 
-**Name:** Andreas Nilsson  
-**Student Credentials:** an224qi
-**Time to setup:** ~1 hour
-
 # Table of Contents
 
 1. [Short Project Overview](#short-project-overview)
